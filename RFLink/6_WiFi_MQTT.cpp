@@ -10,6 +10,7 @@
 #include "3_Serial.h"
 #include "4_Display.h"
 #include "6_WiFi_MQTT.h"
+#include "9_FileConfig.h"
 
 #ifdef ESP32
 #include <WiFi.h>
@@ -17,7 +18,36 @@
 #include <ESP8266WiFi.h>
 #endif
 
+// local AP
+String WIFI_SSID;
+String WIFI_PSWD;
+
+// static IP
+String WIFI_IP;
+String WIFI_DNS;
+String WIFI_GATEWAY;
+String WIFI_SUBNET;
+
+// More options
+String WIFI_HOST;
+byte WIFI_PWR = WIFI_PWR_0;
+
 #ifdef MQTT_ENABLED
+// MQTT Server
+String MQTT_SERVER;
+uint16_t MQTT_PORT;
+String MQTT_ID;
+String MQTT_USER;
+String MQTT_PSWD;
+
+// MQTT Topic
+String MQTT_TOPIC_OUT;
+String MQTT_TOPIC_IN;
+
+// MQTT options
+boolean MQTT_RETAINED;
+
+char MQTTbuffer[PRINT_BUFFER_SIZE]; // Buffer for MQTT message
 
 // MQTT_KEEPALIVE : keepAlive interval in Seconds
 #define MQTT_KEEPALIVE 60
@@ -41,7 +71,7 @@ void setup_WIFI()
   WiFi.setAutoReconnect(true);
 #ifdef ESP8266
   WiFi.setSleepMode(WIFI_MODEM_SLEEP);
-  WiFi.setOutputPower(WIFI_PWR.toInt());
+  WiFi.setOutputPower(WIFI_PWR);
 #endif // ESP8266
   WiFi.mode(WIFI_STA);
 
@@ -69,10 +99,8 @@ void setup_WIFI()
 
 void setup_MQTT()
 {
-  if (MQTT_PORT == "")
-    MQTT_PORT = "1883"; // just in case ....
   MQTTClient.setClient(WIFIClient);
-  MQTTClient.setServer(MQTT_SERVER.c_str(), MQTT_PORT.toInt());
+  MQTTClient.setServer(MQTT_SERVER.c_str(), MQTT_PORT);
   MQTTClient.setCallback(callback);
   bResub = true;
 }
