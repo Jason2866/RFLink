@@ -9,17 +9,9 @@
 #include "RFLink.h"
 #include "2_Signal.h"
 #include "5_Plugin.h"
-#ifdef AUTOCONNECT_ENABLED
-#include "9_AutoConnect.h"
-#ifdef ESP8266
 #include <FS.h>
 #include <LittleFS.h>
-#elif ESP32
-#include <SPIFFS.h>
-#define LittleFS SPIFFS
-#endif // ESP8266
 #include <ArduinoJson.h>
-#endif // AUTOCONNECT
 
 boolean (*Plugin_ptr[PLUGIN_MAX])(byte, char *); // Receive plugins
 byte Plugin_id[PLUGIN_MAX];
@@ -34,7 +26,6 @@ boolean RFDebug = RFDebug_0;     // debug RF signals with plugin 001 (no decode)
 boolean QRFDebug = QRFDebug_0;   // debug RF signals with plugin 001 but no multiplication (faster?, compact)
 boolean RFUDebug = RFUDebug_0;   // debug RF signals with plugin 254 (decode 1st)
 boolean QRFUDebug = QRFUDebug_0; // debug RF signals with plugin 254 but no multiplication (faster?, compact)
-
 
 /**********************************************************************************************\
  * Load plugins
@@ -1316,7 +1307,6 @@ void PluginInit(void)
 #endif
 
 // read config file to desactivated protocols
-#ifdef AUTOCONNECT_ENABLED
   LittleFS.begin();
   Serial.print("Param ");
   Serial.print(PROTOCOL_FILE);
@@ -1349,8 +1339,6 @@ void PluginInit(void)
     Serial.println(F("Failed to open(+r)"));
   }
   LittleFS.end();
-
-#endif // AUTOCONNECT_ENABLED
 
   // Initialiseer alle plugins door aanroep met verwerkingsparameter PLUGIN_INIT
   PluginInitCall(0, 0);

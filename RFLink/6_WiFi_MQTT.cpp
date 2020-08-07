@@ -10,19 +10,12 @@
 #include "3_Serial.h"
 #include "4_Display.h"
 #include "6_WiFi_MQTT.h"
-#ifdef AUTOCONNECT_ENABLED
-#include "9_AutoConnect.h"
-#else
-#include "6_Credentials.h"
-#endif
 
-#ifndef AUTOCONNECT_ENABLED
 #ifdef ESP32
 #include <WiFi.h>
 #elif ESP8266
 #include <ESP8266WiFi.h>
 #endif
-#endif // !AUTOCONNECT_ENABLED
 
 #ifdef MQTT_ENABLED
 
@@ -41,9 +34,6 @@ WiFiClient WIFIClient;
 PubSubClient MQTTClient; // MQTTClient(WIFIClient);
 
 void callback(char *, byte *, unsigned int);
-
-#ifndef AUTOCONNECT_ENABLED
-static String WIFI_PWR = String(WIFI_PWR_0);
 
 void setup_WIFI()
 {
@@ -76,7 +66,6 @@ void setup_WIFI()
   Serial.print(F("WiFi RSSI :\t\t"));
   Serial.println(WiFi.RSSI());
 }
-#endif
 
 void setup_MQTT()
 {
@@ -96,11 +85,6 @@ void callback(char *topic, byte *payload, unsigned int length)
 
 void reconnect()
 { // MQTT connection (documented way from AutoConnect : https://github.com/Hieromon/AutoConnect/tree/master/examples/mqttRSSI_NA)
-
-#ifdef AUTOCONNECT_ENABLED
-  uint8_t retry = 3;
-#endif // AUTOCONNECT_ENABLED
-
   bResub = true;
   while (!MQTTClient.connected())
   {
@@ -120,26 +104,16 @@ void reconnect()
     {
       Serial.print(F("Failed - rc="));
       Serial.println(MQTTClient.state());
-#ifdef AUTOCONNECT_ENABLED
-      if (!--retry)
-        break;
-      delay(500);
-#else  // AUTOCONNECT_ENABLED
       Serial.println(F("MQTT Retry :\tTry again in 5 seconds"));
       // Wait 5 seconds before retrying
       for (byte i = 0; i < 10; i++)
         delay(500); // delay(5000) may cause hang
-#endif // AUTOCONNECT_ENABLED
     }
   }
 }
 
 void publishMsg()
 {
-#ifndef AUTOCONNECT_ENABLED
-  static boolean MQTT_RETAINED = MQTT_RETAINED_0;
-#endif // !AUTOCONNECT_ENABLED
-
   if (!MQTTClient.connected())
     reconnect();
   MQTTClient.publish(MQTT_TOPIC_OUT.c_str(), pbuffer, MQTT_RETAINED);
@@ -165,9 +139,9 @@ void checkMQTTloop()
     lastCheck = millis();
   }
 }
-#endif // MQTT_ENABLED
 
-#if (!defined(AUTOCONNECT_ENABLED) && !defined(MQTT_ENABLED))
+#else // MQTT_ENABLED
+
 #if (defined(ESP32) || defined(ESP8266))
 void setup_WIFI_OFF()
 {
@@ -180,6 +154,6 @@ void setup_WIFI_OFF()
 #ifdef ESP8266
   WiFi.forceSleepBegin();
 #endif
-}
 #endif
+}
 #endif
