@@ -56,7 +56,7 @@ void setup_WIFI()
   WiFi.mode(WIFI_STA);
 
   // Comment out for Dynamic IP
-  WiFi.config(ipaddr_addr(WIFI_IP.c_str()), ipaddr_addr(WIFI_GATEWAY.c_str()), ipaddr_addr(WIFI_SUBNET.c_str()));
+//  WiFi.config(ipaddr_addr(WIFI_IP.c_str()), ipaddr_addr(WIFI_GATEWAY.c_str()), ipaddr_addr(WIFI_SUBNET.c_str()));
 
   // We start by connecting to a WiFi network
   Serial.print(F("WiFi SSID :\t\t"));

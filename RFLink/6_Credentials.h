@@ -12,17 +12,17 @@
 #ifndef AUTOCONNECT_ENABLED
 
 // local AP
-String WIFI_SSID = "your_AP_ssid";
-String WIFI_PSWD = "your_AP_passwd";
+String WIFI_SSID = "your_SSID";
+String WIFI_PSWD = "your_PWD";
 
 // static IP
-String WIFI_IP = "192.168.0.199";
-String WIFI_DNS = "8.8.8.8";
-String WIFI_GATEWAY = "192.168.0.1";
+String WIFI_IP = "192.168.2.145";
+String WIFI_DNS = "192.168.2.1";
+String WIFI_GATEWAY = "192.168.2.1";
 String WIFI_SUBNET = "255.255.255.0";
 
 // MQTT Server
-String MQTT_SERVER = "raspberrypi.local";
+String MQTT_SERVER = "mqtt.lan";
 String MQTT_PORT = "1883";
 String MQTT_ID = "ESP8266-RFLink";
 String MQTT_USER = "your_mqtt_user";

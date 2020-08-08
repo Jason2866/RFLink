@@ -1,3 +1,6 @@
+.cache
 .pio
+.pioenvs
 .vscode
 pictures/Full size/
+RFLink/Credentials.h

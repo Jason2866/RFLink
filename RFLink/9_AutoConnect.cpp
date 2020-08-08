@@ -16,19 +16,23 @@
 #include "5_Plugin.h"
 #include "6_WiFi_MQTT.h"
 #include "9_AutoConnect.h"
+
 #ifdef ESP8266
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 typedef ESP8266WebServer WebServer;
 #include <FS.h>
 #include <LittleFS.h>
-#elif ESP32
+#endif // ESP8266 
+
+#ifdef ESP32
 #include <WiFi.h>
 #include <ESPmDNS.h>
 typedef WebServer WebServer;
 #include <SPIFFS.h>
 #define LittleFS SPIFFS
-#endif // ESP8266
+#endif // EPS32
+
 #include <ArduinoJson.h>
 #include <AutoConnect.h>
 
