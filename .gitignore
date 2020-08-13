@@ -1,5 +1,6 @@
 .pio
+.pioenvs
+.cache
 .vscode
 pictures/Full size/
-data/MQTT.json
-data/WiFi.json
+data/
